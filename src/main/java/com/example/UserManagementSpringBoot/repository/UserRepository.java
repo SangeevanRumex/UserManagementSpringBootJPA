@@ -1,4 +1,4 @@
-package com.example.UserManagementSpringBoot.dao;
+package com.example.UserManagementSpringBoot.repository;
 
 import com.example.UserManagementSpringBoot.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
