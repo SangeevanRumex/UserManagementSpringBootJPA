@@ -13,25 +13,25 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public String addUser(User user){
+    public boolean addUser(User user){
         userRepository.save(user);
-        return "User successfully created";
+        return true;
     }
 
     @Override
-    public String updateUser(User user) {
+    public boolean updateUser(User user) {
         User oldUser = userRepository.findById(user.getId()).orElse(null);
         if(oldUser!=null){
             userRepository.save(user);
-            return "User successfully updated";
+            return true;
         }
-        return "User not found";
+        return false;
     }
 
     @Override
-    public String deleteUser(int id) {
+    public boolean deleteUser(int id) {
         userRepository.deleteById(id);
-        return "User successfully deleted";
+        return true;
     }
 
     @Override
