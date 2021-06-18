@@ -11,11 +11,12 @@ import javax.persistence.Id;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name="user")
 public class User {
     @Id
     @GeneratedValue
     private int id;
     private String userName;
     private String city;
+    private boolean deleted;
 }

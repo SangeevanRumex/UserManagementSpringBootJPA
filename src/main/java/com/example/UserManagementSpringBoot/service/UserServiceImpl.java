@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUser(User user) {
-        User oldUser = userRepository.findById(user.getId()).orElse(null);
+        User oldUser = userRepository.getUserById(user.getId());
         if(oldUser!=null){
             userRepository.save(user);
             return true;
@@ -30,17 +30,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUser(int id) {
-        userRepository.deleteById(id);
+        userRepository.deleteUser(id);
         return true;
     }
 
     @Override
     public List<User> getUsers() {
-        return userRepository.findAll();
+        return userRepository.getUsers();
     }
 
     @Override
     public User getUserById(int id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.getUserById(id);
     }
 }

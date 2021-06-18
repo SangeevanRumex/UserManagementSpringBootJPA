@@ -26,7 +26,7 @@ public class UserController {
         if (userService.updateUser(user)){
             return ResponseEntity.ok().body("User successfully updated");
         };
-        return ResponseEntity.badRequest().body("User not updated");
+        return ResponseEntity.badRequest().body("User not found");
     }
 
     @DeleteMapping("/user/{id}")
