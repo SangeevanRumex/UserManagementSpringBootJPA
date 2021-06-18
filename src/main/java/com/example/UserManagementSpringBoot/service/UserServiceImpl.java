@@ -1,28 +1,34 @@
 package com.example.UserManagementSpringBoot.service;
 
 import com.example.UserManagementSpringBoot.model.User;
+import com.example.UserManagementSpringBoot.model.dto.UserDto;
 import com.example.UserManagementSpringBoot.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
-    public boolean addUser(User user){
-        userRepository.save(user);
+    public boolean addUser(UserDto userDto){
+        userRepository.save(convertFromDto(userDto));
         return true;
     }
 
     @Override
-    public boolean updateUser(User user) {
-        User oldUser = userRepository.getUserById(user.getId());
+    public boolean updateUser(UserDto userDto) {
+        User oldUser = userRepository.getUserById(userDto.getId());
         if(oldUser!=null){
-            userRepository.save(user);
+            userRepository.save(convertFromDto(userDto));
             return true;
         }
         return false;
@@ -30,17 +36,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUser(int id) {
-        userRepository.deleteUser(id);
-        return true;
+        User oldUser = userRepository.getUserById(id);
+        if(oldUser!=null) {
+            userRepository.deleteUser(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public List<User> getUsers() {
-        return userRepository.getUsers();
+    public List<UserDto> getUsers() {
+        List<User> users = userRepository.getUsers();
+        return users.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @Override
-    public User getUserById(int id) {
-        return userRepository.getUserById(id);
+    public UserDto getUserById(int id) {
+        User oldUser = userRepository.getUserById(id);
+        if(oldUser!=null) {
+            return convertToDto(userRepository.getUserById(id));
+        }
+        return null;
+    }
+
+    public UserDto convertToDto(User user) {
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        return userDto;
+    }
+
+    public User convertFromDto(UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        return user;
     }
 }
